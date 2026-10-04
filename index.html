@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>alotrojah.ma - منصة الأترجة لحفظ القرآن الكريم</title>
+
+    <!-- Favicon SVG (رعاً لخطأ 404) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            950: '#041712',
+                            900: '#072b21',
+                            800: '#0f4233',
+                            700: '#155c47',
+                            600: '#1b7a5e',
+                            500: '#22a37e',
+                            400: '#34d399',
+                        },
+                        gold: {
+                            300: '#ffea9f',
+                            400: '#f5d061',
+                            500: '#d4af37',
+                            600: '#b38f24',
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                        amiri: ['Amiri', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #041410;
+            color: #f1f5f9;
+        }
+
+        .glass-card {
+            background: rgba(12, 43, 34, 0.5);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fff2be 0%, #d4af37 50%, #facc15 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .islamic-pattern {
+            background-image: radial-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .surah-number-badge {
+            background: radial-gradient(circle, rgba(212,175,55,0.2) 0%, rgba(7,43,33,0.8) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-screen relative islamic-pattern pb-32">
+
+    <!-- Element Audio HTML5 -->
+    <audio id="quranAudio" preload="none" crossorigin="anonymous"></audio>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-4 z-40 max-w-7xl mx-auto px-4 sm:px-6">
+        <nav class="glass-card rounded-2xl px-5 py-3.5 flex items-center justify-between border border-emerald-500/20 shadow-2xl">
+            <a href="#" class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-600 to-amber-500 p-0.5 shadow-md">
+                    <div class="w-full h-full bg-[#07281f] rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid fa-quran text-amber-400 text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-xl font-bold font-inter tracking-wide gold-gradient-text">alotrojah.ma</span>
+                    <span class="block text-xs text-emerald-400 font-cairo">منصة حفظ القرآن الكريم - برواية ورش</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-3" dir="ltr">
+                <a href="index.html" class="px-3.5 py-2 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/30 text-emerald-300 font-mono text-xs font-semibold">
+                    <i class="fa-solid fa-code text-amber-400"></i> API Portal
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Banner & Master Search -->
+    <section class="relative z-10 pt-10 pb-8 max-w-7xl mx-auto px-4 sm:px-6 text-center">
+        <h1 class="text-3xl sm:text-5xl font-black font-cairo leading-tight mb-3">
+            الفهرس المباشر لمنصة <span class="gold-gradient-text font-inter">alotrojah.ma</span>
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto mb-6">
+            استمع للتلاوة العطرة بصوت <strong class="text-amber-300">الشيخ عمر القزابري (برواية ورش عن نافع)</strong> واقرأ جميع سور القرآن الكريم.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="max-w-2xl mx-auto glass-card rounded-2xl p-2 border border-emerald-500/40 shadow-xl mb-6">
+            <div class="relative w-full flex items-center">
+                <i class="fa-solid fa-magnifying-glass text-amber-400 absolute right-4 text-base"></i>
+                <input type="text" id="searchInput" oninput="filterSurahs()" placeholder="ابحث باسم السورة (مثلاً: البقرة، يس) أو رقمها..." class="w-full bg-[#03130f] text-slate-100 placeholder-slate-400 text-sm pr-11 pl-4 py-3 rounded-xl border border-emerald-500/20 focus:outline-none focus:border-amber-400">
+            </div>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="flex items-center justify-center gap-2 font-cairo text-xs mb-8">
+            <button onclick="setFilter('all')" id="filter-all" class="filter-btn px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold shadow-md">الكل (114)</button>
+            <button onclick="setFilter('Meccan')" id="filter-Meccan" class="filter-btn px-4 py-2 rounded-xl glass-card text-slate-300 hover:text-amber-300">مكية</button>
+            <button onclick="setFilter('Medinan')" id="filter-Medinan" class="filter-btn px-4 py-2 rounded-xl glass-card text-slate-300 hover:text-amber-300">مدنية</button>
+        </div>
+    </section>
+
+    <!-- Surah Grid Container -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 z-10 relative">
+        <div id="loadingState" class="text-center py-16">
+            <i class="fa-solid fa-circle-notch fa-spin text-amber-400 text-4xl mb-3"></i>
+            <p class="text-slate-300 text-sm">جاري جلب البيانات وإعداد سيرفر الصوت...</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 hidden" id="surahGrid">
+            <!-- Dynamically populated -->
+        </div>
+    </section>
+
+    <!-- Audio Player Bar -->
+    <div id="audioPlayerBar" class="fixed bottom-4 left-4 right-4 max-w-4xl mx-auto z-50 glass-card rounded-2xl p-3 border border-amber-500/40 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                <i class="fa-solid fa-volume-high" id="playerIcon"></i>
+            </div>
+            <div>
+                <span id="playerSurahTitle" class="text-sm font-bold text-slate-100 block">اختر سورة للاستماع</span>
+                <span id="playerReciter" class="text-xs text-emerald-400 block">الشيخ عمر القزابري (ورش عن نافع)</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <button onclick="toggleAudio()" id="playPauseBtn" class="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center font-bold shadow-lg transition-all">
+                <i class="fa-solid fa-play" id="playIcon"></i>
+            </button>
+        </div>
+
+        <div class="w-full sm:w-64 flex items-center gap-2">
+            <span class="text-[10px] font-mono text-slate-400" id="currTime">00:00</span>
+            <input type="range" id="audioSeek" value="0" min="0" max="100" class="w-full h-1 bg-emerald-950 rounded-lg appearance-none cursor-pointer accent-amber-400" oninput="seekAudio(this.value)">
+            <span class="text-[10px] font-mono text-slate-400" id="totalTime">00:00</span>
+        </div>
+    </div>
+
+    <!-- Quran Reader Modal -->
+    <div id="readerModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-card max-w-3xl w-full max-h-[85vh] rounded-3xl p-6 border border-emerald-500/40 shadow-2xl flex flex-col relative">
+            <div class="flex items-center justify-between pb-4 border-b border-emerald-500/20">
+                <h3 id="readerModalTitle" class="text-2xl font-bold font-amiri text-amber-300">سورة</h3>
+                <button onclick="closeReaderModal()" class="w-9 h-9 rounded-full bg-emerald-950 hover:bg-emerald-900 border border-emerald-500/30 text-slate-300 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="readerContent" class="overflow-y-auto py-6 px-2 text-right font-amiri text-xl sm:text-2xl leading-[2.5] text-slate-100">
+                <!-- Verses rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allSurahs = [];
+        let currentFilter = 'all';
+        let dynamicReciterServer = "https://server9.mp3quran.net/kazabri/"; // افتراضي
+        let currentAudioSources = [];
+        let currentSourceIndex = 0;
+        const audioElement = document.getElementById('quranAudio');
+
+        // جلب رابط سيرفر الشيخ عمر القزابري المباشر من MP3Quran API
+        async function initAudioServer() {
+            try {
+                const res = await fetch('https://mp3quran.net/api/v3/reciters?language=ar');
+                const data = await res.json();
+                const kazabri = data.reciters.find(r => r.name.includes("عمر القزابري") || r.name.includes("الكزابري"));
+                if (kazabri && kazabri.moshaf && kazabri.moshaf.length > 0) {
+                    const warsh = kazabri.moshaf.find(m => m.name.includes("ورش")) || kazabri.moshaf[0];
+                    if (warsh.server) {
+                        dynamicReciterServer = warsh.server.endsWith('/') ? warsh.server : warsh.server + '/';
+                        console.log("تم تحديد سيرفر الصوت المباشر:", dynamicReciterServer);
+                    }
+                }
+            } catch (e) {
+                console.warn("استخدام السيرفر الافتراضي للصوت:", e);
+            }
+        }
+
+        // جلب قائمة السور (114 سورة)
+        async function fetchSurahs() {
+            await initAudioServer();
+            try {
+                const response = await fetch('https://api.alquran.cloud/v1/surah');
+                const data = await response.json();
+                if (data.code === 200) {
+                    allSurahs = data.data;
+                    document.getElementById('loadingState').classList.add('hidden');
+                    document.getElementById('surahGrid').classList.remove('hidden');
+                    renderSurahs(allSurahs);
+                }
+            } catch (err) {
+                document.getElementById('loadingState').innerHTML = `
+                    <p class="text-red-400 text-sm">حدث خطأ في الاتصال بالخادم. يرجى إعادة المحاولة.</p>
+                `;
+            }
+        }
+
+        function renderSurahs(list) {
+            const container = document.getElementById('surahGrid');
+            container.innerHTML = '';
+
+            list.forEach(s => {
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-2xl p-4 border border-emerald-500/20 flex flex-col justify-between hover:border-amber-400/40 transition-all";
+                
+                const typeText = s.revelationType === "Meccan" ? "مكية" : "مدنية";
+                const typeColor = s.revelationType === "Meccan" ? "text-amber-400 bg-amber-500/10 border-amber-500/30" : "text-emerald-400 bg-emerald-500/10 border-emerald-500/30";
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-8 h-8 rounded-xl surah-number-badge flex items-center justify-center font-bold font-inter text-amber-400 text-xs">
+                                ${s.number}
+                            </div>
+                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full border ${typeColor}">
+                                ${typeText}
+                            </span>
+                        </div>
+
+                        <div class="flex items-baseline justify-between mb-2">
+                            <h3 class="text-xl font-bold font-amiri text-slate-100">${s.name}</h3>
+                            <span class="text-xs font-inter text-slate-400">${s.englishName}</span>
+                        </div>
+
+                        <div class="text-xs text-slate-300 space-y-1 my-3 bg-black/20 p-2 rounded-xl">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">عدد الآيات:</span>
+                                <span class="text-emerald-400 font-semibold font-inter">${s.numberOfAyahs}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 pt-2 border-t border-emerald-500/15">
+                        <button onclick="playAudio(${s.number}, '${s.name}')" class="flex-1 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold text-xs transition-all border border-amber-500/40 flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-play text-[10px]"></i>
+                            <span>استمع</span>
+                        </button>
+                        <button onclick="readSurah(${s.number}, '${s.name}')" class="px-3 py-2 rounded-xl glass-card hover:bg-emerald-900 text-emerald-300 text-xs border border-emerald-500/30" title="قراءة السورة">
+                            <i class="fa-solid fa-book-open"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterSurahs() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            let filtered = allSurahs;
+
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(s => s.revelationType === currentFilter);
+            }
+
+            if (query) {
+                filtered = filtered.filter(s => 
+                    s.name.includes(query) || 
+                    s.englishName.toLowerCase().includes(query) ||
+                    s.number.toString() === query
+                );
+            }
+
+            renderSurahs(filtered);
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = "filter-btn px-4 py-2 rounded-xl glass-card text-slate-300 hover:text-amber-300";
+            });
+            document.getElementById(`filter-${filter}`).className = "filter-btn px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold shadow-md";
+            filterSurahs();
+        }
+
+        // تشغيل الصوت مع التنقل بين السيرفرات المتاحة
+        function playAudio(surahNumber, surahName) {
+            document.getElementById('playerSurahTitle').innerText = `سورة ${surahName}`;
+            const paddedNumber = String(surahNumber).padStart(3, '0');
+            
+            // قائمة السيرفرات مرتبة حسب الأولوية
+            currentAudioSources = [
+                `${dynamicReciterServer}${paddedNumber}.mp3`,
+                `https://archive.org/download/Omar-Al-Kazabri-Warsh/${paddedNumber}.mp3`,
+                `https://server9.mp3quran.net/kazabri/${paddedNumber}.mp3`,
+                `https://server11.mp3quran.net/kazabri/${paddedNumber}.mp3`
+            ];
+            currentSourceIndex = 0;
+
+            tryNextAudioSource();
+        }
+
+        function tryNextAudioSource() {
+            if (currentSourceIndex >= currentAudioSources.length) {
+                alert("تعذر تشغيل الملف الصوتي من المصادر المتاحة حالياً.");
+                updatePlayerState(false);
+                return;
+            }
+
+            const url = currentAudioSources[currentSourceIndex];
+            audioElement.src = url;
+            audioElement.load();
+
+            audioElement.play().then(() => {
+                updatePlayerState(true);
+            }).catch(err => {
+                console.warn(`فشل التشغيل من (${url})، جاري تجربة السيرفر البديل...`);
+                currentSourceIndex++;
+                tryNextAudioSource();
+            });
+        }
+
+        function toggleAudio() {
+            if (!audioElement.src) return;
+            if (audioElement.paused) {
+                audioElement.play().then(() => {
+                    updatePlayerState(true);
+                }).catch(() => tryNextAudioSource());
+            } else {
+                audioElement.pause();
+                updatePlayerState(false);
+            }
+        }
+
+        function updatePlayerState(isPlaying) {
+            const playIcon = document.getElementById('playIcon');
+            const playerIcon = document.getElementById('playerIcon');
+            if (isPlaying) {
+                playIcon.className = "fa-solid fa-pause";
+                playerIcon.className = "fa-solid fa-volume-high text-amber-400 animate-pulse";
+            } else {
+                playIcon.className = "fa-solid fa-play";
+                playerIcon.className = "fa-solid fa-volume-high text-amber-400";
+            }
+        }
+
+        function seekAudio(val) {
+            if (audioElement.duration) {
+                audioElement.currentTime = (val / 100) * audioElement.duration;
+            }
+        }
+
+        audioElement.ontimeupdate = () => {
+            if (audioElement.duration) {
+                const progress = (audioElement.currentTime / audioElement.duration) * 100;
+                document.getElementById('audioSeek').value = progress;
+                document.getElementById('currTime').innerText = formatTime(audioElement.currentTime);
+                document.getElementById('totalTime').innerText = formatTime(audioElement.duration);
+            }
+        };
+
+        audioElement.onended = () => updatePlayerState(false);
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        // عرض نص السورة والآيات
+        async function readSurah(surahNumber, surahName) {
+            document.getElementById('readerModalTitle').innerText = `سورة ${surahName}`;
+            const content = document.getElementById('readerContent');
+            content.innerHTML = '<div class="text-center text-amber-400"><i class="fa-solid fa-circle-notch fa-spin text-2xl"></i><p class="text-sm mt-2">جاري تحميل الآيات...</p></div>';
+            
+            const modal = document.getElementById('readerModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+
+            try {
+                const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}`);
+                const data = await res.json();
+                
+                if (data.code === 200) {
+                    let textHtml = '';
+                    if (surahNumber !== 1 && surahNumber !== 9) {
+                        textHtml += '<div class="text-center text-amber-400 my-4 text-2xl font-bold">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
+                    }
+                    data.data.ayahs.forEach(a => {
+                        textHtml += `${a.text} <span class="text-amber-400 text-lg font-bold px-1">﴿${a.numberInSurah}﴾</span> `;
+                    });
+                    content.innerHTML = textHtml;
+                }
+            } catch (e) {
+                content.innerHTML = '<p class="text-red-400 text-center">تعذر تحميل نص السورة.</p>';
+            }
+        }
+
+        function closeReaderModal() {
+            const modal = document.getElementById('readerModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        window.onload = fetchSurahs;
+    </script>
+</body>
+</html>
